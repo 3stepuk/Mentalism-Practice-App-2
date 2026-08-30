@@ -83,7 +83,7 @@ export const WordCard: React.FC<WordCardProps> = ({ word, index, revealed }) => 
       <div className="mt-3 pt-3 border-t border-[#1e293b] flex items-center justify-between text-[11px] text-gray-500 font-mono uppercase tracking-tight">
         <span>
           {revealed
-            ? word.originalRoleDescription
+            ? (word.role === 'category' ? word.originalRoleDescription : word.role === 'letter1' ? `1st Letter Clue (${word.letter})` : `2nd Letter Clue (${word.letter})`)
             : 'Spectator Transmitted Signal'}
         </span>
         <span className="text-gray-600 select-none">
