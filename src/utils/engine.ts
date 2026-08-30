@@ -175,13 +175,13 @@ export function generateSession(
     ? getRandomItem(categoryPool) 
     : `${categoryToUse.name} Item`;
 
-  // 2. Choose Word starting with 1st letter
-  const word1 = getRandomWordForLetter(letter1, [master.word, categoryClueWord]);
+  // 2. Choose Word starting with 2nd letter (per script order)
+  const word2 = getRandomWordForLetter(letter2, [master.word, categoryClueWord]);
 
-  // 3. Choose Word starting with 2nd letter
-  const word2 = getRandomWordForLetter(letter2, [master.word, categoryClueWord, word1]);
+  // 3. Choose Word starting with 1st letter (per script order)
+  const word1 = getRandomWordForLetter(letter1, [master.word, categoryClueWord, word2]);
 
-  // Construct spectator words
+  // Construct spectator words (2nd letter first, then 1st letter)
   const spectatorWords: SpectatorWord[] = [
     {
       text: categoryClueWord,
@@ -189,16 +189,16 @@ export function generateSession(
       originalRoleDescription: `Category Clue (${categoryToUse.name})`
     },
     {
-      text: word1,
-      role: 'letter1',
-      letter: letter1,
-      originalRoleDescription: `1st Letter Clue (${letter1})`
-    },
-    {
       text: word2,
       role: 'letter2',
       letter: letter2,
       originalRoleDescription: `2nd Letter Clue (${letter2})`
+    },
+    {
+      text: word1,
+      role: 'letter1',
+      letter: letter1,
+      originalRoleDescription: `1st Letter Clue (${letter1})`
     }
   ];
 
