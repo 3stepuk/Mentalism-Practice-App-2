@@ -1,0 +1,6 @@
+{
+  "name": "Mentalism Decoding Practice Trainer",
+  "description": "A high-performance practice terminal for mentalists to train rapid category and two-letter pair mental decoding.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
