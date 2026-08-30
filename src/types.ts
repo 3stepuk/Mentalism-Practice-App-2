@@ -1,3 +1,5 @@
+export type SkillLevel = 'level1' | 'level2' | 'level3';
+
 export interface MasterWord {
   word: string;
   pair: string; // 2-letter uppercase pair, e.g. "SP"
@@ -33,6 +35,8 @@ export interface SessionData {
   isCorrect?: boolean;
   startTime: number;
   endTime?: number;
+  timedOut?: boolean;
+  level: SkillLevel;
 }
 
 export interface TrainerStats {
@@ -48,10 +52,15 @@ export interface TrainerStats {
     correct: boolean;
     durationMs: number;
     date: string;
+    level?: SkillLevel;
+    timedOut?: boolean;
   }>;
 }
 
 export interface TrainerSettings {
+  skillLevel: SkillLevel;
+  level1Category: string; // Category ID for single category mastery
+  timedDrillSeconds: number; // Countdown seconds for Level 3
   enabledCategories: string[];
   instantNextOnCorrect: boolean;
   fuzzyMatching: boolean;

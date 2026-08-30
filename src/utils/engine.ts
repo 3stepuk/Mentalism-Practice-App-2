@@ -73,6 +73,9 @@ export function saveStatsToStorage(stats: TrainerStats): void {
 
 export function getSettingsFromStorage(): TrainerSettings {
   const defaultSettings: TrainerSettings = {
+    skillLevel: 'level2',
+    level1Category: DEFAULT_CATEGORIES[0]?.id || 'tools',
+    timedDrillSeconds: 10,
     enabledCategories: DEFAULT_CATEGORIES.map(c => c.id),
     instantNextOnCorrect: false,
     fuzzyMatching: true,
@@ -86,6 +89,9 @@ export function getSettingsFromStorage(): TrainerSettings {
       return {
         ...defaultSettings,
         ...parsed,
+        skillLevel: ['level1', 'level2', 'level3'].includes(parsed.skillLevel) ? parsed.skillLevel : 'level2',
+        level1Category: parsed.level1Category || defaultSettings.level1Category,
+        timedDrillSeconds: typeof parsed.timedDrillSeconds === 'number' && parsed.timedDrillSeconds > 0 ? parsed.timedDrillSeconds : 10,
         enabledCategories: Array.isArray(parsed.enabledCategories) && parsed.enabledCategories.length > 0
           ? parsed.enabledCategories
           : defaultSettings.enabledCategories
@@ -128,16 +134,25 @@ export function generateSession(
   allCategories: CategoryData[],
   enabledCategoryIds: string[],
   sessionNumber: number,
-  lastMasterWord?: string
+  lastMasterWord?: string,
+  level: 'level1' | 'level2' | 'level3' = 'level2',
+  level1CategoryId?: string
 ): SessionData {
-  // Filter active categories
-  const activeCategories = allCategories.filter(cat => 
-    enabledCategoryIds.length === 0 || enabledCategoryIds.includes(cat.id)
-  );
+  let categoryToUse: CategoryData;
 
-  const categoryToUse = activeCategories.length > 0 
-    ? getRandomItem(activeCategories) 
-    : (allCategories[0] || DEFAULT_CATEGORIES[0]);
+  if (level === 'level1' && level1CategoryId) {
+    // Single Category Mastery mode
+    const matched = allCategories.find(c => c.id === level1CategoryId);
+    categoryToUse = matched || allCategories[0] || DEFAULT_CATEGORIES[0];
+  } else {
+    // Multi-Category or Timed Drill mode
+    const activeCategories = allCategories.filter(cat => 
+      enabledCategoryIds.length === 0 || enabledCategoryIds.includes(cat.id)
+    );
+    categoryToUse = activeCategories.length > 0 
+      ? getRandomItem(activeCategories) 
+      : (allCategories[0] || DEFAULT_CATEGORIES[0]);
+  }
 
   // Filter master words (avoid direct immediate repetition if multiple exist)
   let candidateMasterWords = categoryToUse.words;
@@ -203,7 +218,8 @@ export function generateSession(
     spectatorWords,
     status: 'guessing',
     userGuess: '',
-    startTime: Date.now()
+    startTime: Date.now(),
+    level
   };
 }
 

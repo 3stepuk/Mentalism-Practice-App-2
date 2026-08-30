@@ -19,14 +19,14 @@ export const WordCard: React.FC<WordCardProps> = ({ word, index, revealed }) => 
     }
     if (word.role === 'letter1') {
       return {
-        label: `LETTER 1: [ ${word.letter} ]`,
-        bg: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30',
-        dot: 'bg-indigo-400'
+        label: `KEY ALPHA: [ ${word.letter} ]`,
+        bg: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
+        dot: 'bg-cyan-400'
       };
     }
     return {
-      label: `LETTER 2: [ ${word.letter} ]`,
-      bg: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
+      label: `KEY BETA: [ ${word.letter} ]`,
+      bg: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
       dot: 'bg-amber-400'
     };
   };
@@ -36,24 +36,24 @@ export const WordCard: React.FC<WordCardProps> = ({ word, index, revealed }) => 
   return (
     <div
       id={`word-card-${index}`}
-      className={`relative group rounded-xl p-5 md:p-6 transition-all duration-300 flex flex-col justify-between border ${
+      className={`relative group rounded-lg p-5 md:p-6 transition-all duration-300 flex flex-col justify-between border-2 font-mono ${
         revealed
           ? word.role === 'category'
-            ? 'bg-[#101928]/90 border-emerald-500/40 shadow-lg shadow-emerald-950/30'
+            ? 'bg-[#0b1b17] border-emerald-500/60 shadow-[0_0_15px_rgba(16,185,129,0.15)]'
             : word.role === 'letter1'
-            ? 'bg-[#141530]/90 border-indigo-500/40 shadow-lg shadow-indigo-950/30'
-            : 'bg-[#201815]/90 border-amber-500/40 shadow-lg shadow-amber-950/30'
-          : 'bg-[#121624] border-slate-800/90 hover:border-indigo-500/50 hover:bg-[#161b2e] shadow-md shadow-black/40'
+            ? 'bg-[#081726] border-cyan-500/60 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+            : 'bg-[#1e1509] border-amber-500/60 shadow-[0_0_15px_rgba(245,158,11,0.15)]'
+          : 'bg-[#111827] border-[#1e293b] hover:border-cyan-500/50 hover:bg-[#131d31] shadow-md shadow-black/40'
       }`}
     >
       {/* Card Header with position index */}
       <div className="flex items-center justify-between gap-2 mb-3">
-        <span className="font-mono text-xs text-slate-500 font-semibold tracking-wider">
-          WORD 0{index + 1}
+        <span className="font-mono text-xs text-gray-500 font-bold tracking-widest uppercase">
+          STREAM 0{index + 1}
         </span>
         {revealed && badge && (
           <span
-            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-mono font-semibold border ${badge.bg}`}
+            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-bold border uppercase tracking-wider ${badge.bg}`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${badge.dot} animate-pulse`} />
             {badge.label}
@@ -64,15 +64,15 @@ export const WordCard: React.FC<WordCardProps> = ({ word, index, revealed }) => 
       {/* Main Word Display */}
       <div className="my-2">
         {revealed && (word.role === 'letter1' || word.role === 'letter2') ? (
-          <h3 className="text-2xl sm:text-3xl font-bold tracking-tight font-mono text-slate-100 break-words">
-            <span className={word.role === 'letter1' ? 'text-indigo-400 underline decoration-indigo-500 underline-offset-4' : 'text-amber-400 underline decoration-amber-500 underline-offset-4'}>
+          <h3 className="text-2xl sm:text-3xl font-black tracking-widest font-mono text-white break-words uppercase">
+            <span className={word.role === 'letter1' ? 'text-cyan-400 underline decoration-cyan-400 underline-offset-4' : 'text-amber-400 underline decoration-amber-400 underline-offset-4'}>
               {word.text.charAt(0)}
             </span>
-            <span>{word.text.slice(1)}</span>
+            <span className="text-gray-300">{word.text.slice(1)}</span>
           </h3>
         ) : (
-          <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight font-mono break-words ${
-            revealed && word.role === 'category' ? 'text-emerald-300' : 'text-slate-100'
+          <h3 className={`text-2xl sm:text-3xl font-black tracking-widest font-mono break-words uppercase ${
+            revealed && word.role === 'category' ? 'text-emerald-400' : 'text-white'
           }`}>
             {word.text}
           </h3>
@@ -80,16 +80,17 @@ export const WordCard: React.FC<WordCardProps> = ({ word, index, revealed }) => 
       </div>
 
       {/* Footer descriptor */}
-      <div className="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400 font-mono">
-        <span className="text-slate-500">
+      <div className="mt-3 pt-3 border-t border-[#1e293b] flex items-center justify-between text-[11px] text-gray-500 font-mono uppercase tracking-tight">
+        <span>
           {revealed
             ? word.originalRoleDescription
-            : 'Spectator Clue'}
+            : 'Spectator Transmitted Signal'}
         </span>
-        <span className="text-slate-600 select-none">
+        <span className="text-gray-600 select-none">
           #{index + 1}
         </span>
       </div>
     </div>
   );
 };
+
